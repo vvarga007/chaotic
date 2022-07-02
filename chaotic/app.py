@@ -13,6 +13,7 @@ from chaotic.version import __version__
 
 from chaotic import ChaoticFactory
 
+
 def app() -> None:
     print("")
     try:
@@ -54,6 +55,7 @@ def app() -> None:
         log.error(ex)
         sys.exit(1)
 
+
 def run_periodic(interval: int = 1) -> None:
     log.info(f"Running periodic in intervals of {interval} minute")
     schedule.every(interval).minutes.do(app)
@@ -64,6 +66,7 @@ def run_periodic(interval: int = 1) -> None:
         sys.stdout.write(".")
         sys.stdout.flush()
         time.sleep(1)
+
 
 def main() -> None:
     parser: ArgumentParser = ArgumentParser()
@@ -89,6 +92,7 @@ def main() -> None:
             pass
     else:
         app()
+
 
 if __name__ == "__main__":
     main()

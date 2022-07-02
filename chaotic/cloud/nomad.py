@@ -39,7 +39,9 @@ class Nomad:
             'namespace': namespace,
         }
         r = self.query_api('get', 'allocations', params=params)
-        return r.json()
+        # return only running allocations
+        allocs = [x for x in r.json() if x['ClientStatus'] == 'running']
+        return allocs
 
     def signal_alloc(self, alloc_id: str, signal: str) -> None:
         json = {
@@ -91,7 +93,7 @@ class NomadChaotic(Chaotic):
             allocs = self.nomad.list_allocs(namespace=namespace)
             if allocs:
                 alloc = random.choice(allocs)
-                log.info(f"Selected alloc: {alloc['JobID']} (ID: {alloc['ID']}) on {alloc['NodeName']}")
+                log.info(f"Selected alloc: {alloc['Name']} (ID: {alloc['ID']}) on {alloc['NodeName']}")
                 signal = random.choice(self.configs['signals'])
                 log.info(f"Selected signal: {signal}")
                 if not self.dry_run:
